@@ -1,0 +1,83 @@
+[build-system]
+requires = [
+    "setuptools>=74.1.0",
+    "wheel",
+    "cython>=3.0"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fastapi-extra"
+dynamic = ["version"]
+description = "extra package for fastapi."
+readme = "README.md"
+license = { text = "BSD-3-Clause" }
+requires-python = ">=3.12"
+authors = [
+    { name = "Ziyan Yin", email = "408856732@qq.com" }
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Internet",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: Software Development :: Libraries :: Python Modules"
+]
+dependencies = [
+    "fastapi>=0.141.0,<0.142.0",
+    "httpx2>=2.12.0,<2.13.0",
+    "pydantic-settings>=2.15.0",
+    "sqlmodel>=0.0.39",
+]
+
+[project.optional-dependencies]
+redis = ["redis"]
+scheduler = ["apscheduler"]
+mysql = ["asyncmy"]
+pgsql = ["asyncpg"]
+oracle = ["oracledb"]
+aiomysql = ["aiomysql"]
+
+[tool.setuptools]
+packages = ["fastapi_extra", "fastapi_extra.database", "fastapi_extra.cache"]
+ext-modules = [
+    { name = "fastapi_extra.cursor", sources = ["fastapi_extra/native/cursor.pyx"] },
+    { name = "fastapi_extra.urlparse", sources = ["fastapi_extra/native/urlparse.pyx"] }
+]
+
+[tool.setuptools.dynamic]
+version = {attr = "fastapi_extra.__version__"}  # any module attribute compatible with ast.literal_eval
+
+[tool.ruff]
+line-length = 120
+exclude = [
+    '.git',
+    '__pycache__',
+    'venv',
+    'docs',
+    'tests',
+    'template',
+    'log'
+]
+# Assume Python 3.12.
+target-version = "py312"
+# Always autofix, but never try to fix `F401` (unused imports).
+fix = true
+
+[tool.ruff.lint]
+unfixable = ["F401"]
+# Imported but unused.
+per-file-ignores = {'__init__.py' = ['F401']}
+
+[tool.ruff.lint.mccabe]
+# Unlike Flake8, default to a complexity level of 10.
+max-complexity = 10
+
+[tool.ruff.lint.pyupgrade]
+keep-runtime-typing = true
