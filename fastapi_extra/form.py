@@ -10,16 +10,16 @@ from fastapi_extra.types import C, S, Schema
 
 
 class DataRange(BaseModel, Generic[C]):
-    start: C | None = Field(default=None, title="起始")
-    end: C | None = Field(default=None, title="终止")
+    start: C | None = Field(default=None, title="from")
+    end: C | None = Field(default=None, title="to")
 
 
 class ColumnExpression(BaseModel, Generic[S]):
-    column_name: str = Field(title="列名")
+    column_name: str = Field(title="column")
     option: Literal["eq", "ne", "gt", "lt", "ge", "le"] = Field(
-        default="eq", title="逻辑值"
+        default="eq", title="operator"
     )
-    value: S = Field(title="参考值")
+    value: S = Field(title="value")
 
     @model_validator(mode="after")  # type: ignore
     def validate_value(self):
@@ -28,12 +28,12 @@ class ColumnExpression(BaseModel, Generic[S]):
 
 
 class WhereClause(BaseModel):
-    option: Literal["and", "or"] = Field(default="and", title="关系")
+    option: Literal["and", "or"] = Field(default="and", title="operator")
     column_clauses: list["ColumnExpression | WhereClause"]
 
 
 class Page(BaseModel, Generic[Schema]):
-    items: list[Schema] = Field(default_factory=list, title="列表")
-    total: int = Field(default=0, title="总量")
-    page_num: int = Field(default=0, title="页码")
-    page_size: int = Field(default=0, title="单页大小")
+    items: list[Schema] = Field(default_factory=list, title="items")
+    total: int = Field(default=0, title="total")
+    page_num: int = Field(default=0, title="page_num")
+    page_size: int = Field(default=0, title="page_size")
