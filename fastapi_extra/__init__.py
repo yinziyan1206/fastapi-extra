@@ -1,4 +1,6 @@
-__version__ = "0.9.0"
+"""FastAPI extra utilities and extensions."""
+
+__version__ = "0.9.1"
 
 
 from fastapi import FastAPI
@@ -8,6 +10,15 @@ from fastapi.routing import _IncludedRouter
 
 
 def setup(app: FastAPI) -> None:
+    """Apply internal patches to FastAPI for enhanced functionality.
+
+    This function replaces certain FastAPI internal utilities with custom
+    implementations from ``fastapi_extra._patch`` to improve query parameter
+    parsing, header handling, and route matching for nested routers.
+
+    Args:
+        app: The FastAPI application instance to patch.
+    """
     try:
         from fastapi_extra import _patch
 

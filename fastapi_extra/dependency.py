@@ -65,14 +65,15 @@ class AbstractService(metaclass=DependencyMetaClass, abstract=True):
     __load__ = None
     __instance__ = None
     __token__: ClassVar[str]
-    __container__ = ContextVar[dict[str, Any] | None](
-        "__container__", default=None
-    )
+    __container__: ContextVar[dict[str, Any] | None]
 
     @final
     def __new__(cls, *args, **kwargs) -> Self:
         if cls.__instance__ is None:
             cls.__instance__ = super().__new__(cls)
+            cls.__container__ = ContextVar[dict[str, Any] | None](
+                "__container__", default=None
+            )
         return cls.__instance__
 
     def __init__(self, **kwargs: Any):
